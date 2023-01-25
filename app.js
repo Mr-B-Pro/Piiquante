@@ -14,7 +14,7 @@ app.use(express.json());
 // plugin Mongoose => pour se connecter à la data base Mongo Db
 const mongoose = require("mongoose");
 // mot de passe Mongoose => pour se connecter à la data base Mongo Db
-const password = "Entre123456";
+const password = "FMDP";
 
 // - DECLARATION DES ROUTES : - //
 
