@@ -1,64 +1,34 @@
-// ---- server.js SERT A CREER LE SERVEUR NODE ---- //
+// ------ CREATION SERVEUR ------//
 
 // - IMPORTATION PACKAGE : - //
+// Importation d'express => framework basé sur node.js
+const express = require("express");
+// Application => utilise le framework express
+const app = express();
+// Ecoute du port => 3000
+const port = 3000;
+// Importation cors => pour la securité des headers
+const cors = require("cors");
 
-// Http => qui sera utilisé pour créer le serveur
-const http = require("http");
-// App => qui appel les différentes fonctions implémantées dans l'api
-const app = require("./app");
+// - CONNEXION DATABASE : - //
+// Importation mongo => base de données
+require("./mongo");
 
-// - GERER LE PORT : - //
+// - CONTROLLERS : - //
+// createUser => importation modèle de création de l'utilisateur
+const { createUser } = require("./controllers/users");
 
-// On dit à l'app express sur quel port elle va tourner
-// normalizePort renvoie un port valide, qu'il soit fourni sous la forme d'un numéro ou d'une chaîne
-const normalizePort = (val) => {
-  const port = parseInt(val, 10);
+// - MIDDLEWARE : - //
+// Exécution cors => débloque header pour que tout le monde fasse requetes
+app.use(cors());
+// Exécution express.json => transforme les données requête POST en JSON
+app.use(express.json());
 
-  if (isNaN(port)) {
-    return val;
-  }
-  if (port >= 0) {
-    return port;
-  }
-  return false;
-};
-// on utilise port 3000 par défaut, s'il n'est pas dispo on utilise la variable environnement
-const port = normalizePort(process.env.PORT || "3000");
-app.set("port", port);
+// - ROUTES : - //
+// Chemin => création d'utilisateur
+app.post("/api/auth/signup", createUser);
+app.get("/", (req, res) => res.send("Hello World!"));
 
-// errorHandler recherche les ≠ erreurs et les gère de manière appropriée. Elle est ensuite enregistrée dans le serveur
-const errorHandler = (error) => {
-  if (error.syscall !== "listen") {
-    throw error;
-  }
-  const address = server.address();
-  const bind =
-    typeof address === "string" ? "pipe " + address : "port: " + port;
-  switch (error.code) {
-    case "EACCES":
-      console.error(bind + " requires elevated privileges.");
-      process.exit(1);
-      break;
-    case "EADDRINUSE":
-      console.error(bind + " is already in use.");
-      process.exit(1);
-      break;
-    default:
-      throw error;
-  }
-};
-
-// on créé une nouvelle constante dans laquelle on appelle la fonction qui sera appelée à chaque requête serveur
-const server = http.createServer(app);
-
-server.on("error", errorHandler);
-
-// ecouteur d'évènements consigne le port ou le canal nommé sur lequel le serveur s'exécute dans la console
-server.on("listening", () => {
-  const address = server.address();
-  const bind = typeof address === "string" ? "pipe " + address : "port " + port;
-  console.log("Listening on " + bind);
-});
-
-// ce serveur attend les requêtes envoyées en utilisant listen
-server.listen(port);
+// - LISTEN : - //
+// Application => écoute du port
+app.listen(port, () => console.log("Listening on port " + port));
