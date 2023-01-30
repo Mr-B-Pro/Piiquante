@@ -1,9 +1,11 @@
 // ------ CREATION SERVEUR ------//
 
 // - IMPORTATION PACKAGE : - //
-// Importation d'express => framework basé sur node.js
+// Importation dotenv => charge les variables
+require("dotenv").config();
+// Importation express => framework basé sur node.js
 const express = require("express");
-// Application => utilise le framework express
+// Application => utilise framework express
 const app = express();
 // Ecoute du port => 3000
 const port = 3000;
@@ -15,8 +17,8 @@ const cors = require("cors");
 require("./mongo");
 
 // - CONTROLLERS : - //
-// createUser => importation modèle de création de l'utilisateur
-const { createUser } = require("./controllers/users");
+// createUser => importation modèle de création de l'utilisateur signup + login
+const { createUser, logUser } = require("./controllers/users");
 
 // - MIDDLEWARE : - //
 // Exécution cors => débloque header pour que tout le monde fasse requetes
@@ -25,8 +27,10 @@ app.use(cors());
 app.use(express.json());
 
 // - ROUTES : - //
-// Chemin => création d'utilisateur
+// Chemin => création d'utilisateur sign up
 app.post("/api/auth/signup", createUser);
+// Chemin => création d'utilisateur login
+app.post("/api/auth/login", logUser);
 app.get("/", (req, res) => res.send("Hello World!"));
 
 // - LISTEN : - //
