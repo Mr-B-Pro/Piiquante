@@ -1,4 +1,4 @@
-// ------ CONNEXION A NOTRE BASE DE DONNEES MONGODB ------//
+// ------ CONNEXION A NOTRE BASE DE DONNEES MONGODB ------ //
 
 // - IMPORTATION PACKAGES : - //
 // Importation mongodb => base de données
@@ -19,7 +19,7 @@ const uri = `mongodb+srv://${userName}:${password}@cluster1.em6hcyp.mongodb.net/
 mongoose
   .connect(uri)
   .then(() => console.log("Connecté à MongoDB !"))
-  .catch((err) => console.error("Erreur de connexion à MongoDB: ", err));
+  .catch((err) => console.error("Erreur de connexion à MongoDB !: ", err));
 
 // - SCHEMA BASE DE DONNEES : - //
 // Schema userSchema => objet création compte
@@ -28,6 +28,7 @@ const userSchema = new mongoose.Schema({
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
 });
+
 // Invocation uniqueValidator => plugin verifie utilisateur unique
 userSchema.plugin(uniqueValidator);
 // Mongoose model => nom du schéma + utilisation de userSchema

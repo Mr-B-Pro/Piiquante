@@ -1,4 +1,4 @@
-// ------ CREATION SERVEUR ------//
+// ------ CREATION SERVEUR ------ //
 
 // - IMPORTATION PACKAGES : - //
 // Importation dotenv => masque les données sensibles
@@ -31,7 +31,7 @@ app.use(express.json());
 app.post("/api/auth/signup", createUser);
 // Chemin post authentification login => invoque function connexion utilisateur
 app.post("/api/auth/login", logUser);
-// Chemin get => execute la function qui affiche hello world
+// Chemin get absolu => execute la function qui affiche hello world
 app.get("/", (req, res) => res.send("Hello World!"));
 
 // - LISTEN : - //
