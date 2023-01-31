@@ -1,28 +1,29 @@
-// ------ CREATION UTILISATEUR ------//
+// ------ CREATION + CONNEXION UTILISATEUR ------//
 
 // - CONNEXION DATABASE : - //
-// Importation mongo => base de données
+// Importation objet user => locale mongodb base de données
 const { User } = require("../mongo");
-// Importation bcrypt => crypte des données
+
+// - IMPORTATION PACKAGES : - //
+// Importation bcrypt => crypte les données sensibles
 const bcrypt = require("bcrypt");
 
 // - SIGN UP UTILISATEUR : - //
-// Function createUser => sert de modèle pour créer un compte sur notre site
+// Function asynchrone createUser => sert de modèle creation compte utilisateur
 async function createUser(req, res) {
   const { email, password } = req.body;
-  // hashedPassword => crypte le mot de passe
+  // invocation function hashPassword => crypte le mot de passe
   const hashedPassword = await hashPassword(password);
-  console.log("password:", password);
-  console.log("hashedPassword:", hashedPassword);
+  // schema user => objet création email + mot de passe cryptés
   const user = new User({ email, password: hashedPassword });
-
+  // sauvegarde => modele creation compte utilisateur
   user
     .save()
     // status 201 => ressource crée
     .then(() => res.status(201).send({ message: "Utilisateur enregistré !" }))
     // status 409 => conflit avec l'état actuel du server
     .catch((err) =>
-      res.status(409).send({ message: "User pas enregistré :" + err })
+      res.status(409).send({ message: "Utilisateur pas enregistré: " + err })
     );
 }
 
@@ -30,15 +31,17 @@ async function createUser(req, res) {
 function hashPassword(password) {
   // saltRounds => chiffre 10 fois
   const saltRounds = 10;
+  // renvoi le mot de passe crypté + chiffré 10 fois
   return bcrypt.hash(password, saltRounds);
 }
 
 // - LOGIN UTILISATEUR : - //
+// Function logUser => sert de modèle connexion compte utilisateur
 function logUser(req, res) {
   const email = req.body.email;
   const password = req.body.password;
 }
 
 // - EXPORTATION : - //
-// createUser => exportation du modèle utilisateur
+// Exportation objets createUser, logUser => modèles creation + connexion utilisateur
 module.exports = { createUser, logUser };

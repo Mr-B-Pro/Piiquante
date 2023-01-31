@@ -1,38 +1,39 @@
 // ------ CREATION SERVEUR ------//
 
-// - IMPORTATION PACKAGE : - //
-// Importation dotenv => charge les variables
+// - IMPORTATION PACKAGES : - //
+// Importation dotenv => masque les données sensibles
 require("dotenv").config();
-// Importation express => framework basé sur node.js
+// Importation express => framework minimaliste basé sur node.js
 const express = require("express");
-// Application => utilise framework express
+// Invocation function express => framework minimaliste basé sur node.js
 const app = express();
 // Ecoute du port => 3000
 const port = 3000;
-// Importation cors => pour la securité des headers
+// Importation cors => pour ajouter des headers
 const cors = require("cors");
 
 // - CONNEXION DATABASE : - //
-// Importation mongo => base de données
+// Importation locale mongodb => base de données
 require("./mongo");
 
 // - CONTROLLERS : - //
-// createUser => importation modèle de création de l'utilisateur signup + login
+//  Importation objets createUser + logUser =>  locale modèles création + connexion utilisateur
 const { createUser, logUser } = require("./controllers/users");
 
 // - MIDDLEWARE : - //
-// Exécution cors => débloque header pour que tout le monde fasse requetes
+// Invocation function cors => pour ajouter des headers
 app.use(cors());
-// Exécution express.json => transforme les données requête POST en JSON
+// Invocation function express.json => parse les données des requêtes post en json
 app.use(express.json());
 
 // - ROUTES : - //
-// Chemin => création d'utilisateur sign up
+// Chemin post authentification signup => invoque function creation utilisateur
 app.post("/api/auth/signup", createUser);
-// Chemin => création d'utilisateur login
+// Chemin post authentification login => invoque function connexion utilisateur
 app.post("/api/auth/login", logUser);
+// Chemin get => execute la function qui affiche hello world
 app.get("/", (req, res) => res.send("Hello World!"));
 
 // - LISTEN : - //
-// Application => écoute du port
+// Application écoute => le port 3000
 app.listen(port, () => console.log("Listening on port " + port));
