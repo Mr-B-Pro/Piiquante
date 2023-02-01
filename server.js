@@ -19,6 +19,8 @@ require("./mongo");
 // - CONTROLLERS : - //
 //  Importation objets createUser + logUser =>  locale modèles création + connexion utilisateur
 const { createUser, logUser } = require("./controllers/users");
+//  Importation objet getSauces =>  locale modèle création sauces
+const { getSauces } = require("./controllers/sauces");
 
 // - MIDDLEWARE : - //
 // Invocation function cors => pour ajouter des headers
@@ -27,11 +29,13 @@ app.use(cors());
 app.use(express.json());
 
 // - ROUTES : - //
-// Chemin post authentification signup => invoque function creation utilisateur
+// Chemin post api signup => invoque function creation utilisateur
 app.post("/api/auth/signup", createUser);
-// Chemin post authentification login => invoque function connexion utilisateur
+// Chemin post api login => invoque function connexion utilisateur
 app.post("/api/auth/login", logUser);
-// Chemin get absolu => execute la function qui affiche hello world
+// Chemin get api sauces => execute function obtenir sauces
+app.get("/api/sauces", getSauces);
+// Chemin get absolu => execute function qui affiche hello world
 app.get("/", (req, res) => res.send("Hello World!"));
 
 // - LISTEN : - //

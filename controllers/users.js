@@ -34,7 +34,7 @@ async function createUser(req, res) {
 }
 
 // - HASH LE MOT DE PASSE : - //
-// Function hashPassword => crypte le mot de passe
+// Function hashPassword => sert à crypter le mot de passe
 function hashPassword(password) {
   // saltRounds => chiffre 10 fois
   const saltRounds = 10;
@@ -72,7 +72,7 @@ async function logUser(req, res) {
 }
 
 // - CREATION TOKEN : - //
-// Function createToken => création token utilisateur
+// Function createToken => sert à créer token utilisateur
 function createToken(email) {
   // jwtPassword => injecte le mot de passe utilisateur
   const jwtPassword = process.env.JWT_PASSWORD;
