@@ -26,30 +26,40 @@ const Product = mongoose.model("Product", productSchema);
 // Function getSauces => sert à gerer le token
 function getSauces(req, res) {
   console.log("Le token à été validé, nous sommes dans getSauces !");
-  // si token est ok => invocation function find
+  // si token est ok => invocation function find sur objet création sauce
   Product.find({}).then((products) => res.send(products));
 }
 
 // - CREATION SAUCE : - //
 // Function createSauce => sert à créer une sauce
 function createSauce(req, res) {
-  const body = req.body;
-  const file = req.file;
-  console.log({ body, file });
+  // body + file  => recupere les données du body + données de l'image de la requete
+  const { body, file } = req;
+  // fileName  => recupere les données du nom de l'image
+  const { fileName } = file;
+  // JSON.parse => transforme données sauce qui est en string en un objet
+  const sauce = JSON.parse(body.sauce);
+  // variables => recupere les données de l'objet sauce sur les élements du product
+  const { userId, name, manufacturer, description, mainPepper, heat } = sauce;
+
+  // fonction makeImageUrl => lien absolu dans l'url pour l'image
+  function makeImageUrl(req, fileName) {
+    return req.protocol + "://" + req.get("host") + "/images/" + fileName;
+  }
 
   // product => objet creation sauce
   const product = new Product({
-    userId: "userId",
-    name: "name",
-    manufacturer: "manufacturer",
-    description: "description",
-    mainPepper: "mainPepper",
-    imageUrl: "imageUrl",
-    heat: "heat",
+    userId: userId,
+    name: name,
+    manufacturer: manufacturer,
+    description: description,
+    mainPepper: mainPepper,
+    imageUrl: makeImageUrl(req, fileName),
+    heat: heat,
     likes: 0,
     dislikes: 0,
-    usersLiked: ["usersLiked"],
-    usersDisliked: ["usersDisliked"],
+    usersLiked: [],
+    usersDisliked: [],
   });
   // sauvegarde => creation sauce
   product
