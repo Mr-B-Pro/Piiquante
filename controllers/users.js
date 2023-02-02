@@ -11,7 +11,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
 // - SIGN UP UTILISATEUR : - //
-// Function asynchrone createUser => sert de modèle creation compte utilisateur
+// Function asynchrone createUser => sert à créer compte utilisateur
 async function createUser(req, res) {
   // si creation utilisateur ok
   try {
@@ -43,7 +43,7 @@ function hashPassword(password) {
 }
 
 // - LOGIN UTILISATEUR : - //
-// Function asynchrone logUser => sert de modèle connexion compte utilisateur
+// Function asynchrone logUser => sert à connecter compte utilisateur
 async function logUser(req, res) {
   // si trouve un utilisateur
   try {
@@ -81,5 +81,5 @@ function createToken(email) {
 }
 
 // - EXPORTATION : - //
-// Exportation objets createUser, logUser => modèles creation + connexion utilisateur
+// Exportation objets createUser + logUser => creation + connexion utilisateur
 module.exports = { createUser, logUser };

@@ -1,39 +1,63 @@
-// ------ CREATION SAUCES ------ //
+// ------ GESTION TOKEN + CREATION SAUCES ------ //
 
 // - IMPORTATION PACKAGES : - //
-// Importation jsonwebtoken => création token
-const jwt = require("jsonwebtoken");
+// Importation mongodb => base de données
+const mongoose = require("mongoose");
 
-// - VOIR LES SAUCES UTILISATEURS : - //
-// Function getSauces => sert à obtenir sauces utilisateur
-function getSauces(req, res) {
-  // req.header => recupere token de la requête dans headers authorization
-  const header = req.header("Authorization");
-  // si headers n'est pas défini =>  renvoi status 403 conflit avec l'état actuel du server
-  if (header == null) return res.status(403).send({ message: "Invalide !" });
-  // si trouve le token => split donc separe elements + 1 donc recupere deuxieme element du token
-  const token = header.split(" ")[1];
-  // si token n'est pas défini =>  renvoi status 403 conflit avec l'état actuel du server
-  if (token == null)
-    return res.status(403).send({ message: "Token n'est pas null !" });
-  // jwt.verify => sert à verifier en decryptant token + verifi le mot de passe + invocation function
-  jwt.verify(token, process.env.JWT_PASSWORD, (err, decoded) =>
-    handleToken(err, decoded, res)
-  );
-}
+// - SCHEMA CREATION SAUCE : - //
+// Schema productSchema => objet création sauce
+const productSchema = new mongoose.Schema({
+  userId: String,
+  name: String,
+  manufacturer: String,
+  description: String,
+  mainPepper: String,
+  imageUrl: String,
+  heat: Number,
+  likes: Number,
+  dislikes: Number,
+  usersLiked: [String],
+  usersDisliked: [String],
+});
+// Mongoose model => nom du schéma + utilisation de productSchema
+const Product = mongoose.model("Product", productSchema);
 
 // - GERER LE TOKEN : - //
-// Function handleToken => sert à gerer le le token
-function handleToken(err, decoded, res) {
-  // si token pas ok => status 403 conflit avec l'état actuel du server
-  if (err) res.status(403).send({ message: "Token invalide " + err });
-  // si token ok =>
-  else {
-    console.log("Le token a l'air bon", decoded);
-    res.send({ message: "Ok, voici toutes les sauces." });
-  }
+// Function getSauces => sert à gerer le token
+function getSauces(req, res) {
+  console.log("Le token à été validé, nous sommes dans getSauces !");
+  // si token est ok => invocation function find
+  Product.find({}).then((products) => res.send(products));
+}
+
+// - CREATION SAUCE : - //
+// Function createSauce => sert à créer une sauce
+function createSauce(req, res) {
+  const body = req.body;
+  const file = req.file;
+  console.log({ body, file });
+
+  // product => objet creation sauce
+  const product = new Product({
+    userId: "userId",
+    name: "name",
+    manufacturer: "manufacturer",
+    description: "description",
+    mainPepper: "mainPepper",
+    imageUrl: "imageUrl",
+    heat: "heat",
+    likes: 0,
+    dislikes: 0,
+    usersLiked: ["usersLiked"],
+    usersDisliked: ["usersDisliked"],
+  });
+  // sauvegarde => creation sauce
+  product
+    .save()
+    .then((res) => console.log("Produit enregistré ! ", res))
+    .catch(console.error);
 }
 
 // - EXPORTATION : - //
-// Exportation objets getSauces => modèles creation sauces
-module.exports = { getSauces };
+// Exportation getSauces + createSauce => gerer token + creation sauce
+module.exports = { getSauces, createSauce };
