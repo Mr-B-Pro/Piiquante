@@ -64,7 +64,11 @@ function createSauce(req, res) {
   // sauvegarde => creation sauce
   product
     .save()
-    .then((res) => console.log("Produit enregistré ! ", res))
+    .then((message) => {
+      // status 201 => ressource crée
+      res.status(201).send({ message: message });
+      return console.log("Produit enregistré ! ", message);
+    })
     .catch(console.error);
 }
 

@@ -1,14 +1,14 @@
 // ------ CREATION + CONNEXION UTILISATEUR ------ //
 
-// - CONNEXION DATABASE : - //
-// Importation objet user mongoose modele => locale mongodb base de données
-const { User } = require("../mongo");
-
 // - IMPORTATION PACKAGES : - //
 // Importation bcrypt => crypte les données sensibles
 const bcrypt = require("bcrypt");
 // Importation jsonwebtoken => création token
 const jwt = require("jsonwebtoken");
+
+// - CONNEXION DATABASE : - //
+// Importation objet user mongoose modele => locale mongodb base de données
+const { User } = require("../mongo");
 
 // - SIGN UP UTILISATEUR : - //
 // Function asynchrone createUser => sert à créer compte utilisateur
@@ -33,7 +33,6 @@ async function createUser(req, res) {
   }
 }
 
-// - HASH LE MOT DE PASSE : - //
 // Function hashPassword => sert à crypter le mot de passe
 function hashPassword(password) {
   // saltRounds => chiffre 10 fois
