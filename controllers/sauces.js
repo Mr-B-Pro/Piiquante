@@ -3,6 +3,8 @@
 // - IMPORTATION PACKAGES : - //
 // Importation mongodb => base de données
 const mongoose = require("mongoose");
+// Importation File System => gere les fichiers dans Node
+const unlink = require("fs").promises.unlink;
 
 // - SCHEMA CREATION SAUCE : - //
 // Schema productSchema => objet création sauce
@@ -26,8 +28,47 @@ const Product = mongoose.model("Product", productSchema);
 // Function getSauces => sert à gerer le token
 function getSauces(req, res) {
   console.log("Le token à été validé, nous sommes dans getSauces !");
-  // si token est ok => invocation function find sur objet création sauce
-  Product.find({}).then((products) => res.send(products));
+  // si token est ok => invocation function find sur le schema Product
+  Product.find({})
+    .then((products) => res.send(products))
+    // status 500 => serveur rencontre un problème qui l'empêche de répondre à la requête
+    .catch((error) => res.status(500).send(error));
+}
+
+// - GERER L'ID : - //
+// Function getSauceById => sert à gerer l'id
+function getSauceById(req, res) {
+  // id => recupere params id dans l'url
+  const { id } = req.params;
+  // invocation function findById sur le schema Product => recherche un seul document par son id
+  Product.findById(id)
+    .then((product) => res.send(product))
+    .catch(console.error);
+}
+
+// - SUPPRIMER UNE SAUCE : - //
+// Function deleteSauce => sert à supprimer une sauce
+function deleteSauce(req, res) {
+  // id => recupere params id dans l'url
+  const { id } = req.params;
+  // invocation function findByIdAndDelete sur le schema Product => supprime l'id
+  Product.findByIdAndDelete(id)
+    // invocation function deleteImage => supprime image du server
+    .then(deleteImage)
+    .then((product) => res.send({ message: product }))
+    // status 500 => serveur rencontre un problème qui l'empêche de répondre à la requête
+    .catch((err) => res.status(500).send({ message: err }));
+}
+
+// - SUPPRIMER IMAGE : - //
+// Function deleteImage => sert à supprime image du server
+function deleteImage(product) {
+  // imageUrl  => recupere l'url de l'image
+  const { imageUrl } = product;
+  // fileToDelete  => recupere l'url de l'image + split donc separe elements entre / + recupere le dernier element avec -1
+  const fileToDelete = imageUrl.split("/").at(-1);
+  // fs unlink => supprimer le contenu du dossier images grâce à l'url de l'image
+  return unlink(`images/${fileToDelete}`).then(() => product);
 }
 
 // - CREATION SAUCE : - //
@@ -73,5 +114,5 @@ function createSauce(req, res) {
 }
 
 // - EXPORTATION : - //
-// Exportation getSauces + createSauce => gerer token + creation sauce
-module.exports = { getSauces, createSauce };
+// Exportation getSauces + createSauce + getSauceById + deleteSauce  => gerer token + creation sauce + gerer l'id + supprimer sauce
+module.exports = { getSauces, createSauce, getSauceById, deleteSauce };

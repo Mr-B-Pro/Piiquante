@@ -18,5 +18,5 @@ app.use(express.json());
 // Importation function authentificateUser => locale authentifie utilisateur
 
 // - EXPORTATION : - //
-// Exportation app => framework minimaliste basé sur node.js
+// Exportation app + express => framework minimaliste basé sur node.js
 module.exports = { app, express };

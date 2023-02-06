@@ -12,7 +12,7 @@ function authentificateUser(req, res, next) {
   // si headers n'est pas défini =>  renvoi status 403 conflit avec l'état actuel du server
   if (header == null) return res.status(403).send({ message: "Invalide !" });
 
-  // si trouve le token => split donc separe elements + 1 donc recupere deuxieme element du token
+  // si trouve le token => split donc separe elements sur l'espace + 1 donc recupere deuxieme element du token
   const token = header.split(" ")[1];
   // si token n'est pas défini =>  renvoi status 403 conflit avec l'état actuel du server
   if (token == null)
