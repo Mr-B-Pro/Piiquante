@@ -15,12 +15,13 @@ require("./mongo");
 // - CONTROLLERS : - //
 //  Importation fonctions createUser + logUser => locale création + connexion utilisateur
 const { createUser, logUser } = require("./controllers/users");
-//  Importation fonctions getSauces + createSauce + getSauceById + deleteSauce => locale gere le token + création sauces + gerer l'id + supprimer sauce
+//  Importation fonctions getSauces + createSauce + getSauceById + deleteSauce + modifySauce => locale gere le token + création sauces + gerer l'id + supprimer sauce + modifier sauce
 const {
   getSauces,
   createSauce,
   getSauceById,
   deleteSauce,
+  modifySauce,
 } = require("./controllers/sauces");
 
 // - MIDDLEWARE : - //
@@ -47,6 +48,8 @@ app.post(
 app.get("/api/sauces/:id", authentificateUser, getSauceById);
 // Chemin delete api sauces id => recupere param id + execute functions authentifier utilisateur + supprimer une sauce
 app.delete("/api/sauces/:id", authentificateUser, deleteSauce);
+// Chemin put api sauces id => execute function authentifier utilisateur + modifier sauce
+app.put("/api/sauces/:id", authentificateUser, modifySauce);
 // Chemin get absolu => execute function qui affiche hello world
 app.get("/", (req, res) => res.send("Hello World!"));
 
