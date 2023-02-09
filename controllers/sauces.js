@@ -243,7 +243,7 @@ function incrementVote(product, userId, like) {
 }
 
 // - EXPORTATION : - //
-// Exportation getSauces + createSauce + getSauceById + deleteSauce + modifySauce  => gerer token + creation sauce + gerer l'id + supprimer sauce + modifier la sauce
+// Exportation getSauces + createSauce + getSauceById + deleteSauce + modifySauce  => gere token + creation sauce + gerer l'id + supprimer sauce + modifier la sauce
 module.exports = {
   sendClientResponse,
   getSauce,
