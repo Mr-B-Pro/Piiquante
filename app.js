@@ -15,7 +15,6 @@ const cors = require("cors");
 app.use(cors());
 // Invocation function express.json => reconnaît objet request entrant en tant qu'objet JSON
 app.use(express.json());
-// Importation function authentificateUser => locale authentifie utilisateur
 
 // - EXPORTATION : - //
 // Exportation app + express => framework minimaliste basé sur node.js

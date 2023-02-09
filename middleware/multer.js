@@ -24,9 +24,8 @@ function makeFilename(req, file) {
   file.fileName = fileName;
   return fileName;
 }
-
 // upload => met l'image dans le dossier images
-const upload = multer({ storage: storage });
+const upload = multer({ storage });
 
 // - EXPORTATION : - //
 // Exportation upload => met l'image dans le dossier images
