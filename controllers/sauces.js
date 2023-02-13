@@ -22,7 +22,7 @@ const productSchema = new mongoose.Schema({
   usersDisliked: [String],
 });
 // Product => nom du schéma + utilisation de productSchema
-// Fonction mongoose model => est utilisée pour créer une collection d'une base de données
+// Fonction mongoose.model => est utilisée pour créer une collection d'une base de données
 const Product = mongoose.model("Product", productSchema);
 mongoose.set("strictQuery", false);
 
@@ -69,7 +69,7 @@ function deleteSauce(req, res) {
     .then((product) => sendClientResponse(product, res))
     // invocation function deleteImage => sert à supprimer image
     .then((item) => deleteImage(item))
-    .then((res) => console.log("FILE DELETED", res))
+    .then((res) => console.log("FICHIER SUPPRIMÉ: ", res))
     // status 500 => serveur rencontre un problème qui l'empêche de répondre à la requête
     // fonction send => envoie la réponse HTTP
     .catch((err) => res.status(500).send({ message: err }));
@@ -94,8 +94,8 @@ function modifySauce(req, res) {
     .then((dbResponse) => sendClientResponse(dbResponse, res))
     // invocation function deleteImage => sert à supprimer image
     .then((product) => deleteImage(product))
-    .then((res) => console.log("FILE DELETED", res))
-    .catch((err) => console.error("PROBLEM UPDATING", err));
+    .then((res) => console.log("FICHIER SUPPRIMÉ: ", res))
+    .catch((err) => console.error("PROBLÈME DE MISE À JOUR: ", err));
 }
 
 // - SUPPRIMER UNE IMAGE : - //
@@ -103,7 +103,7 @@ function modifySauce(req, res) {
 function deleteImage(product) {
   // si il n'y a rien dans la base de donnée alors ne fait rien
   if (product == null) return;
-  console.log("DELETE IMAGE", product);
+  console.log("SUPPRIMER L'IMAGE: ", product);
 
   // imageToDelete  => recupere l'url de l'image + split donc separe elements entre les / + recupere le dernier element avec -1
   const imageToDelete = product.imageUrl.split("/").at(-1);
@@ -114,7 +114,7 @@ function deleteImage(product) {
 // - GERER LE PAYLOAD : - //
 // Function makePayload => sert à gerer le payload avec ou sans l'image
 function makePayload(hasNewImage, req) {
-  console.log("hasNewImage:", hasNewImage);
+  console.log("Voici hasNewImage: ", hasNewImage);
   // si il y a pas d'image :
   // renvoi les données de la requete
   if (!hasNewImage) return req.body;
@@ -124,8 +124,8 @@ function makePayload(hasNewImage, req) {
   const payload = JSON.parse(req.body.sauce);
   // invocation fonction makeImageUrl => sert à trouver lien absolu de l'url de l'image
   payload.imageUrl = makeImageUrl(req, req.file.fileName);
-  console.log("NOUVELLE IMAGE A GERER");
-  console.log("voici le payload:", payload);
+  console.log("NOUVELLE IMAGE A GERER: ");
+  console.log("Voici le payload: ", payload);
   // renvoi payload => les données de la sauce sous forme d'objet
   return payload;
 }
@@ -136,13 +136,15 @@ function sendClientResponse(product, res) {
   // si modification sauce pas ok :
   // alors renvoi status 404 => le serveur ne trouve pas la ressource demandée
   if (product == null) {
-    console.log("NOTHING TO UPDATE");
+    console.log("RIEN A METTRE A JOUR: ");
     // fonction send => envoie la réponse HTTP
-    return res.status(404).send({ message: "Object not found in database" });
+    return res
+      .status(404)
+      .send({ message: "Objet introuvable dans la base de données: " });
   }
   // si modification sauce ok
   // renvoi status 200 => réussite requête
-  console.log("ALL GOOD, UPDATING:", product);
+  console.log("TOUT EST BIEN MIS A JOUR: ", product);
   // la méthode Promise.resolve renvoi une promesse résolue avec la valeur donnée
   // fonction send => envoie la réponse HTTP
   return Promise.resolve(res.status(200).send(product)).then(() => product);
@@ -200,7 +202,7 @@ function likeSauce(req, res) {
   if (![1, -1, 0].includes(like))
     // alors renvoi status 403 => serveur comprend requête mais refuse d'autoriser
     // fonction send => envoie la réponse HTTP
-    return res.status(403).send({ message: "Invalid like value" });
+    return res.status(403).send({ message: "Le vote est invalide: " });
 
   // si like est égal à 1, -1 ou 0 :
   // invocation function getSauce => sert à trouver l'id
@@ -234,14 +236,16 @@ function resetVote(product, userId, res) {
   // la méthode includes permet de déterminer si un tableau contient une valeur et renvoi true si c'est le cas sinon renvoi false
   if ([usersLiked, usersDisliked].every((arr) => arr.includes(userId)))
     // alors renvoi la méthode Promise.reject qui renvoie un objet Promise qui est rejeté à cause d'une raison donnée
-    return Promise.reject("User seems to have voted both ways");
+    return Promise.reject(
+      "L'utilisateur semble avoir voté dans les deux sens: "
+    );
 
   // si il n'a pas déja like ou dislike :
   // la méthode some teste si un élément du tableau réussit le test de la fonction fournie. Elle renvoie vrai si dans le tableau elle trouve un élément pour lequel la fonction fournie renvoie vrai, sinon il renvoie faux
   // la méthode includes permet de déterminer si un tableau contient une valeur et renvoi true si c'est le cas sinon renvoi false
   if (![usersLiked, usersDisliked].some((arr) => arr.includes(userId)))
     // alors renvoi la méthode Promise.reject qui renvoie un objet Promise qui est rejeté à cause d'une raison donnée
-    return Promise.reject("User seems to not have voted");
+    return Promise.reject("L'utilisateur semble ne pas avoir voté: ");
 
   // si c'est un like qu'il faut enlever :
   // la méthode includes permet de déterminer si un tableau contient une valeur et renvoi true si c'est le cas sinon renvoi false

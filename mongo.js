@@ -18,8 +18,8 @@ const uri = `mongodb+srv://${username}:${password}@cluster1.em6hcyp.mongodb.net/
 // Connexion => à l'uri
 mongoose
   .connect(uri)
-  .then(() => console.log("Connected to Mongo!"))
-  .catch((err) => console.error("Error connecting to Mongo: ", err));
+  .then(() => console.log("Connecté à Mongo: "))
+  .catch((err) => console.error("Erreur de connexion à Mongo: ", err));
 
 // - SCHEMA BASE DE DONNEES : - //
 // Schema userSchema => objet création compte

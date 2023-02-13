@@ -26,13 +26,15 @@ async function createUser(req, res) {
     await user.save();
     // status 201 => ressource crée
     // fonction send => envoie la réponse HTTP
-    res.status(201).send({ message: "Utilisateur enregistré !" });
+    res.status(201).send({ message: "L'utilisateur est enregistré: " });
 
     // si creation utilisateur pas ok
   } catch (err) {
     // status 409 => conflit avec l'état actuel du server
     // fonction send => envoie la réponse HTTP
-    res.status(409).send({ message: "Utilisateur pas enregistré !: " + err });
+    res
+      .status(409)
+      .send({ message: "L'utilisateur n'est pas enregistré: " + err });
   }
 }
 
@@ -60,7 +62,7 @@ async function logUser(req, res) {
     // si password pas ok status 403 => serveur comprend requête mais refuse d'autoriser
     if (!isPasswordOk) {
       // fonction send => envoie la réponse HTTP
-      res.status(403).send({ message: "Mot de passe incorrect !" });
+      res.status(403).send({ message: "Mot de passe incorrect: " });
     }
     // invocation function createToken => création token utilisateur
     const token = createToken(email);
@@ -73,7 +75,7 @@ async function logUser(req, res) {
     console.error(err);
     // status 500 => serveur rencontre un problème qui empêche la requête
     // fonction send => envoie la réponse HTTP
-    res.status(500).send({ message: "Erreur interne !" });
+    res.status(500).send({ message: "Erreur interne: " });
   }
 }
 
