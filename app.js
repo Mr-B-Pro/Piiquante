@@ -17,5 +17,5 @@ app.use(cors());
 app.use(express.json());
 
 // - EXPORTATION : - //
-// Exportation app + express => framework minimaliste basé sur node.js
+// Exportation : app + express => framework minimaliste basé sur node.js
 module.exports = { app, express };

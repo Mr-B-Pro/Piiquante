@@ -29,9 +29,10 @@ const userSchema = new mongoose.Schema({
 });
 // Invocation uniqueValidator => plugin verifie utilisateur unique
 userSchema.plugin(uniqueValidator);
+
 // Mongoose model => nom du schéma + utilisation de userSchema
 const User = mongoose.model("User", userSchema);
 
 // - EXPORTATION : - //
-// Exportation mongoose + objet user => base de données + schema utilisateur
+// Exportation : mongoose => base de données + objet user => nom du schéma et utilisation de userSchema
 module.exports = { mongoose, User };

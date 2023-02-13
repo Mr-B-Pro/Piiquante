@@ -5,6 +5,7 @@ const { createUser, logUser } = require("../controllers/users");
 // - IMPORTATION PACKAGES : - //
 // Importation express => framework minimaliste basé sur node.js
 const express = require("express");
+// Importation express.Router => est utilisée pour créer un nouvel objet routeur dans le programme pour gérer les requêtes
 const authRouter = express.Router();
 
 // - ROUTES : - //
@@ -14,5 +15,5 @@ authRouter.post("/signup", createUser);
 authRouter.post("/login", logUser);
 
 // - EXPORTATION : - //
-// Exportation app + express => framework minimaliste basé sur node.js
+// Exportation : authRouter => est utilisée pour créer un nouvel objet routeur dans le programme pour gérer les requêtes
 module.exports = { authRouter };

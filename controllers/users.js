@@ -21,14 +21,17 @@ async function createUser(req, res) {
     const hashedPassword = await hashPassword(password);
     // schema user => objet création email + mot de passe cryptés
     const user = new User({ email, password: hashedPassword });
-    // sauvegarde => modele creation compte utilisateur
+    // fonction save => sauvegarde le modele creation compte utilisateur
+    // fonction save =>
     await user.save();
     // status 201 => ressource crée
+    // fonction send => envoie la réponse HTTP
     res.status(201).send({ message: "Utilisateur enregistré !" });
 
     // si creation utilisateur pas ok
   } catch (err) {
     // status 409 => conflit avec l'état actuel du server
+    // fonction send => envoie la réponse HTTP
     res.status(409).send({ message: "Utilisateur pas enregistré !: " + err });
   }
 }
@@ -51,21 +54,25 @@ async function logUser(req, res) {
     const password = req.body.password;
     // invocation function findOne sur le schema utilisateur => trouve email utilisateur existant
     const user = await User.findOne({ email: email });
+
     // bcrypt.compare => compare mot de passe avec mot de passe utilisateur existant
     const isPasswordOk = await bcrypt.compare(password, user.password);
     // si password pas ok status 403 => serveur comprend requête mais refuse d'autoriser
     if (!isPasswordOk) {
+      // fonction send => envoie la réponse HTTP
       res.status(403).send({ message: "Mot de passe incorrect !" });
     }
     // invocation function createToken => création token utilisateur
     const token = createToken(email);
     // si password ok => status 200 réussite requête + user id + token
+    // fonction send => envoie la réponse HTTP
     res.status(200).send({ userId: user._id, token: token });
 
     // si trouve pas utilisateur
   } catch (err) {
-    // status 500 => serveur rencontre un problème qui empêche la requête
     console.error(err);
+    // status 500 => serveur rencontre un problème qui empêche la requête
+    // fonction send => envoie la réponse HTTP
     res.status(500).send({ message: "Erreur interne !" });
   }
 }
@@ -80,5 +87,5 @@ function createToken(email) {
 }
 
 // - EXPORTATION : - //
-// Exportation objets createUser + logUser => creation + connexion utilisateur
+// Exportation : createUser => sert à créer compte utilisateur + logUser => sert à connecter compte utilisateur
 module.exports = { createUser, logUser };

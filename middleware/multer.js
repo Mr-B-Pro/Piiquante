@@ -18,7 +18,7 @@ const storage = multer.diskStorage({
 // Function makeFilename => sert renommer l'image
 function makeFilename(req, file) {
   console.log("req, file:", file);
-  // fileName => renomme l'image + avec la date + enleve les espaces et remplace par un -
+  // fileName => renomme l'image avec la date et enleve les espaces en remplaçant par un barre -
   const fileName = `${Date.now()}-${file.originalname}`.replace(/\s/g, "-");
   // file.fileName => met le nouvau nom sur la requete du file
   file.fileName = fileName;
@@ -28,5 +28,5 @@ function makeFilename(req, file) {
 const upload = multer({ storage });
 
 // - EXPORTATION : - //
-// Exportation upload => met l'image dans le dossier images
+// Exportation : upload => met l'image dans le dossier images
 module.exports = { upload };
