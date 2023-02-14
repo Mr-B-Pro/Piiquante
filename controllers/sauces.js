@@ -21,6 +21,7 @@ const productSchema = new mongoose.Schema({
   usersLiked: [String],
   usersDisliked: [String],
 });
+
 // Product => nom du schéma + utilisation de productSchema
 // Fonction mongoose.model => est utilisée pour créer une collection d'une base de données
 const Product = mongoose.model("Product", productSchema);
