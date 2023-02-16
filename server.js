@@ -1,5 +1,5 @@
 // - IMPORTATION PACKAGES : - //
-// Importation app => locale framework minimaliste basé sur node.js
+// Importation express => locale framework minimaliste basé sur node.js
 const { app, express } = require("./app");
 const { saucesRouter } = require("./routers/sauces.router");
 const { authRouter } = require("./routers/auth.router");

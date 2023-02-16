@@ -19,7 +19,7 @@ async function createUser(req, res) {
     const { email, password } = req.body;
     // invocation function hashPassword => crypte le mot de passe
     const hashedPassword = await hashPassword(password);
-    // schema user => objet création email + mot de passe cryptés
+    // user => element de l'objet user avec création email + mot de passe cryptés
     const user = new User({ email, password: hashedPassword });
     // fonction save => sauvegarde le modele creation compte utilisateur
     // fonction save =>

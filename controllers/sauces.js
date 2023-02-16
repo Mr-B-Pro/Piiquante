@@ -15,7 +15,7 @@ const productSchema = new mongoose.Schema({
   description: String,
   mainPepper: String,
   imageUrl: String,
-  heat: { type: Number, min: 1, max: 5 },
+  heat: { type: Number, min: 1, max: 10 },
   likes: Number,
   dislikes: Number,
   usersLiked: [String],
@@ -27,11 +27,10 @@ const productSchema = new mongoose.Schema({
 const Product = mongoose.model("Product", productSchema);
 mongoose.set("strictQuery", false);
 
-// - GERER LE TOKEN : - //
-// Function getSauces => sert à gerer le token
+// Function getSauces => sert à obtenir sauces
 function getSauces(req, res) {
   // si token est ok :
-  // méthode find de mongoose sur l'objet Product => renvoie toutes les occurrences de l'objet
+  // méthode find de mongoose sur l'objet Product => la méthode find est utilisée pour sélectionner des documents dans la base de données. ({}) pour renvoyer tous les documents d'une collection.
   Product.find({})
     // fonction send => envoie la réponse HTTP
     .then((products) => res.send(products))
@@ -53,6 +52,7 @@ function getSauce(req, res) {
 function getSauceById(req, res) {
   // invocation function getSauce => sert à trouver l'id
   getSauce(req, res)
+    // invocation function sendClientResponse => sert à gerer l'envoi d'une sauce modifiée au client
     .then((product) => sendClientResponse(product, res))
     // status 500 => serveur rencontre un problème qui l'empêche de répondre à la requête
     // fonction send => envoie la réponse HTTP
@@ -66,7 +66,7 @@ function deleteSauce(req, res) {
   const { id } = req.params;
   // invocation function de mongoose findByIdAndDelete sur l'objet Product => supprime la sauce correspondant à l'id
   Product.findByIdAndDelete(id)
-    // invocation sendClientResponse => sert à gerer l'envoi d'une sauce modifiée au client
+    // invocation function sendClientResponse => sert à gerer l'envoi d'une sauce modifiée au client
     .then((product) => sendClientResponse(product, res))
     // invocation function deleteImage => sert à supprimer image
     .then((item) => deleteImage(item))
@@ -91,7 +91,7 @@ function modifySauce(req, res) {
 
   // invocation function findByIdAndUpdate sur l'objet Product => sert à modifier la sauce
   Product.findByIdAndUpdate(id, payload)
-    // invocation sendClientResponse => sert à gerer l'envoi d'une sauce modifiée au client
+    // invocation function sendClientResponse => sert à gerer l'envoi d'une sauce modifiée au client
     .then((dbResponse) => sendClientResponse(dbResponse, res))
     // invocation function deleteImage => sert à supprimer image
     .then((product) => deleteImage(product))
@@ -289,7 +289,7 @@ function incrementVote(product, userId, like) {
 }
 
 // - EXPORTATION : - //
-// Exportation : sendClientResponse => sert à gerer l'envoi d'une sauce modifiée au client + getSauce => sert à trouver l'id + getSauces => sert à gerer le token + createSauce => sert à créer une sauce + getSauceById => sert à gerer l'id pour les sauces + deleteSauce => sert à supprimer une sauce + modifySauce => sert à modifier une sauce + likeSauce => sert à gerer les likes et dislikes sur les sauces
+// Exportation : sendClientResponse => sert à gerer l'envoi d'une sauce modifiée au client + getSauce => sert à trouver l'id + getSauces => sert à obtenir sauces + createSauce => sert à créer une sauce + getSauceById => sert à gerer l'id pour les sauces + deleteSauce => sert à supprimer une sauce + modifySauce => sert à modifier une sauce + likeSauce => sert à gerer les likes et dislikes sur les sauces
 module.exports = {
   sendClientResponse,
   getSauce,
